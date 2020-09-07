@@ -4,7 +4,8 @@ Debug Panel middleware
 import threading
 import time
 
-from django.core.urlresolvers import reverse, resolve, Resolver404
+# from django.core.urlresolvers import reverse, resolve, Resolver404
+from django.urls import reverse 
 from django.conf import settings
 from debug_panel.cache import cache
 import debug_toolbar.middleware
@@ -42,8 +43,8 @@ class DebugPanelMiddleware(debug_toolbar.middleware.DebugToolbarMiddleware):
         """
 
         try:
-            res = resolve(request.path, urlconf=debug_panel.urls)
-        except Resolver404:
+            res = reverse(request.path, urlconf=debug_panel.urls)
+        except Exception:
             return super(DebugPanelMiddleware, self).process_request(request)
 
         return res.func(request, *res.args, **res.kwargs)
